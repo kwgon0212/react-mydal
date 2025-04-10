@@ -10,7 +10,8 @@
   "module": "dist/index.esm.js",
   "types": "dist/types/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "README.md"
   ],
   "scripts": {
     "build": "rollup -c"
@@ -24,10 +25,8 @@
   ],
   "author": "kwgon0102",
   "license": "MIT",
-  "type": "commonjs",
-  "dependencies": {
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+  "bugs": {
+    "url": "https://github.com/kwgon0212/react-mydal/issues"
   },
   "peerDependencies": {
     "react": "^17.0.0 || ^18.0.0",
