@@ -1,0 +1,47 @@
+{
+  "name": "react-mydal",
+  "version": "1.0.0",
+  "description": "React Custom Modal Component",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kwgon0102/react-mydal"
+  },
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/types/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "rollup -c"
+  },
+  "keywords": [
+    "react",
+    "modal",
+    "component",
+    "dialog",
+    "popup"
+  ],
+  "author": "kwgon0102",
+  "license": "MIT",
+  "type": "commonjs",
+  "dependencies": {
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "peerDependencies": {
+    "react": "^17.0.0 || ^18.0.0",
+    "react-dom": "^17.0.0 || ^18.0.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^28.0.3",
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.2",
+    "rollup": "^2.79.2",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-typescript2": "^0.36.0",
+    "typescript": "^5.8.3"
+  }
+}
