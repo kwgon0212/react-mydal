@@ -1,10 +1,10 @@
 {
   "name": "@kwgon0102/react-mydal",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "React Custom Modal Component",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kwgon0102/react-mydal"
+    "url": "https://github.com/kwgon0212/react-mydal"
   },
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
@@ -29,8 +29,8 @@
     "url": "https://github.com/kwgon0212/react-mydal/issues"
   },
   "peerDependencies": {
-    "react": "^17.0.0 || ^18.0.0",
-    "react-dom": "^17.0.0 || ^18.0.0"
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^28.0.3",

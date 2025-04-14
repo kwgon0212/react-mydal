@@ -1,16 +1,23 @@
-# React MyDal
+# @kwgon0102/react-mydal
 
-간단하고 커스터마이징 가능한 React Modal Component
+React Custom Modal Component
 
-## 설치
+## Features
+
+- 🎯 다양한 위치 설정 (center, top-center, top-left, top-right, bottom-center, bottom-left, bottom-right)
+- 🎨 커스텀 스타일링 (모달, 배경, 닫기 버튼)
+- ⌨️ ESC 키로 닫기
+- 🖱️ 외부 클릭으로 닫기
+- ❌ 커스텀 닫기 버튼 (내부/외부 위치 선택)
+- 🎨 닫기 버튼 스타일 커스터마이징 (크기, 색상, 아이콘)
+
+## Installation
 
 ```bash
 npm install @kwgon0102/react-mydal
-# or
-yarn add @kwgon0102/react-mydal
 ```
 
-## 기본 사용법
+## Usage
 
 ```tsx
 import { Modal } from "@kwgon0102/react-mydal";
@@ -18,38 +25,54 @@ import { Modal } from "@kwgon0102/react-mydal";
 function App() {
   const [isOpen, setIsOpen] = useState(false);
 
-  return (
-    <>
-      <button onClick={() => setIsOpen(true)}>모달 열기</button>
+  const options = {
+    isOpen,
+    onClose: setIsOpen,
+    position: "center",
+    onEsc: true,
+    onOutsideClick: true,
+    closeButton: "inside",
+    closeButtonStyle: {
+      width: 20,
+      height: 20,
+      color: "red",
+      icon: <div>닫기</div>,
+    },
+    modalStyle: {
+      backgroundColor: "yellowgreen",
+    },
+  };
 
-      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
-        <p>모달 내용1...</p>
-        <p>모달 내용2...</p>
-      </Modal>
-    </>
+  return (
+    <Modal {...options}>
+      <div>모달 내용</div>
+    </Modal>
   );
 }
 ```
 
-## Props
+## Examples
 
-| Prop          | 타입                          | 기본값   | 설명                            |
-| ------------- | ----------------------------- | -------- | ------------------------------- |
-| isOpen        | boolean                       | -        | 모달 표시 여부                  |
-| onClose       | () => void                    | -        | 모달 닫기 핸들러                |
-| children      | ReactNode                     | -        | 모달 내용                       |
-| className     | string                        | -        | 모달 컨테이너에 적용할 클래스명 |
-| backdropStyle | CSSProperties                 | -        | 배경 스타일 커스터마이징        |
-| modalStyle    | CSSProperties                 | -        | 모달 스타일 커스터마이징        |
-| modalPosition | "center" \| "top" \| "bottom" | "center" | 모달 위치                       |
-| onEscape      | () => void                    | -        | ESC 키 입력 시 실행할 함수      |
+### 다양한 위치 설정
 
-## 스타일 커스터마이징 예제
+```tsx
+// 상단 중앙
+<Modal isOpen={isOpen} onClose={setIsOpen} position="top-center">
+  상단 중앙 모달
+</Modal>
+
+// 우측 하단
+<Modal isOpen={isOpen} onClose={setIsOpen} position="bottom-right">
+  우측 하단 모달
+</Modal>
+```
+
+### 커스텀 스타일링
 
 ```tsx
 <Modal
   isOpen={isOpen}
-  onClose={() => setIsOpen(false)}
+  onClose={setIsOpen}
   backdropStyle={{
     backgroundColor: "rgba(0, 0, 0, 0.7)",
     backdropFilter: "blur(5px)",
@@ -60,71 +83,52 @@ function App() {
     boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
   }}
 >
-  <h2>커스텀 스타일 모달</h2>
-  <p>스타일이 적용된 모달 내용입니다.</p>
+  커스텀 스타일 모달
 </Modal>
 ```
 
-## 위치 조정 예제
-
-```tsx
-// 상단에 표시
-<Modal
-  isOpen={isOpen}
-  onClose={() => setIsOpen(false)}
-  modalPosition="top"
->
-  상단 모달
-</Modal>
-
-// 하단에 표시
-<Modal
-  isOpen={isOpen}
-  onClose={() => setIsOpen(false)}
-  modalPosition="bottom"
->
-  하단 모달
-</Modal>
-```
-
-## ESC 키 이벤트 처리 예제
+### 커스텀 닫기 버튼
 
 ```tsx
 <Modal
   isOpen={isOpen}
-  onClose={() => setIsOpen(false)}
-  onEscape={() => {
-    console.log("ESC 키가 눌렸습니다");
-    setIsOpen(false);
+  onClose={setIsOpen}
+  closeButton="outside"
+  closeButtonStyle={{
+    width: 30,
+    height: 30,
+    color: "#ff0000",
+    icon: <span>✕</span>,
   }}
 >
-  ESC 키 이벤트가 처리되는 모달
+  커스텀 닫기 버튼 모달
 </Modal>
 ```
 
-## 클래스명 적용 예제
+### ESC 키와 외부 클릭 비활성화
 
 ```tsx
-<Modal
-  isOpen={isOpen}
-  onClose={() => setIsOpen(false)}
-  className="custom-modal"
->
-  <div className="modal-content">
-    클래스명이 적용된 모달
-  </div>
+<Modal isOpen={isOpen} onClose={setIsOpen} onEsc={false} onOutsideClick={false}>
+  수동으로만 닫을 수 있는 모달
 </Modal>
-
-// CSS
-.custom-modal {
-  border: 2px solid #333;
-}
-
-.modal-content {
-  padding: 20px;
-}
 ```
 
-## 라이선스
+## Props
+
+| Prop             | Type                                                                                                        | Default  | Description               |
+| ---------------- | ----------------------------------------------------------------------------------------------------------- | -------- | ------------------------- |
+| isOpen           | boolean                                                                                                     | -        | 모달 표시 여부            |
+| onClose          | (value: boolean) => void                                                                                    | -        | 모달 닫기 핸들러          |
+| children         | ReactNode                                                                                                   | -        | 모달 내용                 |
+| className        | string                                                                                                      | -        | 모달 컨테이너 클래스명    |
+| backdropStyle    | CSSProperties                                                                                               | -        | 배경 스타일 커스터마이징  |
+| modalStyle       | CSSProperties                                                                                               | -        | 모달 스타일 커스터마이징  |
+| position         | "center" \| "top-center" \| "top-left" \| "top-right" \| "bottom-center" \| "bottom-left" \| "bottom-right" | "center" | 모달 위치                 |
+| onEsc            | boolean                                                                                                     | false    | ESC 키로 닫기 활성화      |
+| onOutsideClick   | boolean                                                                                                     | false    | 외부 클릭으로 닫기 활성화 |
+| closeButton      | "inside" \| "outside"                                                                                       | -        | 닫기 버튼 위치            |
+| closeButtonStyle | { width?: number; height?: number; color?: string; icon?: ReactNode }                                       | -        | 닫기 버튼 스타일          |
+
+## License
 
 MIT

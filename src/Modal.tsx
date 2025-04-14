@@ -1,17 +1,34 @@
-import React, { ReactNode, useEffect } from "react";
+import React, { ReactNode, useRef } from "react";
 import ReactDOM from "react-dom";
-import { useOutsideClick } from "./hooks/useOutsideClick";
 import { useEscapeKey } from "./hooks/useEscapeKey";
+import { useOutsideClick } from "./hooks/useOutsideClick";
+import { getPositionStyle } from "./helps/getPositionStyle";
+import CloseIcon from "./icons/Close";
 
-type ModalProps = {
+export type ModalOptions = {
   isOpen: boolean;
-  onClose: () => void;
-  children: ReactNode;
+  onClose: React.Dispatch<React.SetStateAction<boolean>>;
+  children?: ReactNode;
   className?: string;
   backdropStyle?: React.CSSProperties;
   modalStyle?: React.CSSProperties;
-  modalPosition?: "center" | "top" | "bottom";
-  onEscape?: () => void;
+  position?:
+    | "center"
+    | "top-center"
+    | "top-left"
+    | "top-right"
+    | "bottom-center"
+    | "bottom-left"
+    | "bottom-right";
+  onEsc?: boolean;
+  onOutsideClick?: boolean;
+  closeButton?: "inside" | "outside";
+  closeButtonStyle?: {
+    width?: number;
+    height?: number;
+    color?: string;
+    icon?: ReactNode;
+  };
 };
 
 export const Modal = ({
@@ -21,38 +38,24 @@ export const Modal = ({
   className,
   backdropStyle: customBackdropStyle,
   modalStyle: customModalStyle,
-  modalPosition = "center",
-  onEscape,
-}: ModalProps) => {
-  const modalRef = useOutsideClick<HTMLDivElement>(onClose);
-  onEscape && useEscapeKey(onEscape);
+  position = "center",
+  onOutsideClick = false,
+  onEsc = false,
+  closeButton,
+  closeButtonStyle,
+}: ModalOptions) => {
+  const modalRef = useRef<HTMLDivElement>(null);
+
+  useOutsideClick(modalRef, onOutsideClick, () => onClose(!isOpen));
+  useEscapeKey(onEsc, () => onClose(!isOpen));
 
   if (!isOpen) return null;
-
-  const getPositionStyle = (): React.CSSProperties => {
-    switch (modalPosition) {
-      case "top":
-        return {
-          alignItems: "flex-start",
-          paddingTop: "20px",
-        };
-      case "bottom":
-        return {
-          alignItems: "flex-end",
-          paddingBottom: "20px",
-        };
-      default:
-        return {
-          alignItems: "center",
-        };
-    }
-  };
 
   return ReactDOM.createPortal(
     <div
       style={{
         ...defaultBackdropStyle,
-        ...getPositionStyle(),
+        ...getPositionStyle(position),
         ...customBackdropStyle,
       }}
     >
@@ -62,28 +65,55 @@ export const Modal = ({
         className={className}
       >
         {children}
+        {closeButton && (
+          <button
+            onClick={() => onClose(!isOpen)}
+            style={{
+              ...CloseButtonStyle,
+              top: closeButton === "inside" ? "10px" : "-30px",
+              right: closeButton === "inside" ? "10px" : "0",
+            }}
+          >
+            {closeButtonStyle?.icon ? (
+              closeButtonStyle?.icon
+            ) : (
+              <CloseIcon
+                width={closeButtonStyle?.width}
+                height={closeButtonStyle?.height}
+                color={closeButtonStyle?.color}
+              />
+            )}
+          </button>
+        )}
       </div>
     </div>,
     document.body
   );
 };
 
+const CloseButtonStyle: React.CSSProperties = {
+  position: "absolute",
+  top: "-30px",
+  right: 0,
+  backgroundColor: "transparent",
+  border: "none",
+  cursor: "pointer",
+};
+
 const defaultBackdropStyle: React.CSSProperties = {
   position: "fixed",
-  top: 0,
-  left: 0,
-  width: "100vw",
-  height: "100vh",
+  inset: 0,
   backgroundColor: "rgba(0, 0, 0, 0.5)",
   display: "flex",
-  justifyContent: "center",
   zIndex: 1000,
+  padding: "40px",
 };
 
 const defaultModalStyle: React.CSSProperties = {
+  position: "relative",
   background: "#fff",
-  borderRadius: "8px",
+  borderRadius: "10px",
   padding: "24px",
-  maxWidth: "500px",
-  width: "100%",
+  width: "600px",
+  boxShadow: "10px 10px 10px 0px rgba(0, 0, 0, 0.07)",
 };
